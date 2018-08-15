@@ -1,0 +1,26 @@
+﻿<Workflow id="ABC3C391-B1FE-416E-A606-B2C42BD49EB9"
+	name="demo workflow 1" flow-engine-version="1.0"
+	author="Vincent Nacar" date-published="11/02/2019">
+
+  <!-- Activity -->
+  <Activities>
+    <Activity id="Test1" name="HelloWorld" assembly="HelloWorld.dll">
+      <Property name="InputName" value="Enteng Nacar 2" />
+    </Activity>
+    <Activity id="Test2" name="HelloWorld" assembly="HelloWorld.dll">
+      <Property name="InputName" value="Vincent Nacar" />
+    </Activity>
+    <Activity id="TestSum1" name="Sum" assembly="Sum.dll">
+      <Property name="InputNumber1" value="10" />
+      <Property name="InputNumber2" value="8" />
+    </Activity>
+  </Activities>
+
+  <!-- Execution flow -->
+  <Execution>
+    <Activity id="Test2" />
+    <Activity id="Test1" />
+    <Activity id="TestSum1" />
+  </Execution>
+  
+</Workflow>

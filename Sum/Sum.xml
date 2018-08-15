@@ -1,0 +1,4 @@
+﻿<Activity id="{ActivityId}" name="Sum" assembly="Sum.dll">
+  <Property name="InputNumber1" value="{Integer}" />
+  <Property name="InputNumber2" value="{Integer}" />
+</Activity>

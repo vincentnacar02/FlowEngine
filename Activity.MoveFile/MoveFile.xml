@@ -1,0 +1,4 @@
+﻿<Activity id="{ActivityId}" name="MoveFile" assembly="Activity.MoveFile.dll">
+  <Property name="InputPath" value="{String}" />
+  <Property name="DestinationPath" value="{String}" />
+</Activity>
