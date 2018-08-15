@@ -1,3 +1,0 @@
-﻿<Activity id="{ActivityId}" name="HelloWorld" assembly="HelloWorld.dll">
-  <Property name="InputName" value="{String}" />
-</Activity>
