@@ -27,5 +27,10 @@ namespace FlowEngine.Core
         {
             return this._value;
         }
+
+        public void setValue(object value)
+        {
+            this._value = value;
+        }
     }
 }

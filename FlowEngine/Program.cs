@@ -20,7 +20,7 @@ namespace FlowEngine
             loader.setLibPath(AppSettings.get("LibPath"));
             loader.LoadActivities();
             loader.runWorkflow();
-            log.InfoFormat("FlowEngine execution finished.", worflowPath);
+            log.InfoFormat("FlowEngine execution finished [{0}]", worflowPath);
         }
     }
 }

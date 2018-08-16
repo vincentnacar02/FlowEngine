@@ -10,5 +10,6 @@ namespace FlowEngine.SDK.interfaces
     {
         object getId();
         IResult run();
+        void setPropertyValue(string key, object value);
     }
 }

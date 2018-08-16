@@ -10,5 +10,6 @@ namespace FlowEngine.SDK.interfaces
     {
         void addProperty(IProperty prop);
         IProperty getProperty(string key);
+        IDictionary<string, IProperty> getItems();
     }
 }

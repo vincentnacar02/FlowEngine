@@ -24,5 +24,10 @@ namespace FlowEngine.Core
         {
             return this._properties[key];
         }
+
+        public IDictionary<string, IProperty> getItems()
+        {
+            return this._properties;
+        }
     }
 }

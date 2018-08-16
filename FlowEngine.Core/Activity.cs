@@ -29,5 +29,12 @@ namespace FlowEngine.Core
         {
             return this._properties;
         }
+
+        public void setPropertyValue(string key, object value)
+        {
+            IProperty prop = this._properties.getProperty(key);
+            prop.setValue(value);
+            this._properties.getItems()[key] = prop;
+        }
     }
 }

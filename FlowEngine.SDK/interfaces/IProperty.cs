@@ -11,5 +11,7 @@ namespace FlowEngine.SDK.interfaces
         string getName();
 
         object getValue();
+
+        void setValue(object value);
     }
 }
