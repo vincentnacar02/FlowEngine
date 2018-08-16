@@ -15,6 +15,8 @@ namespace FlowEngine.Loader
 {
     public class WorkflowLoader
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private String _libPath;
         private XmlDocument _doc = new XmlDocument();
         private IDictionary<object, IActivity> _activities = new Dictionary<object, IActivity>();
@@ -48,7 +50,7 @@ namespace FlowEngine.Loader
                     {
                         dynamic activity_instance = Activator.CreateInstance(type, id, props);
                         _activities.Add(id, activity_instance);
-                        Console.WriteLine("Assembly Loaded {0}", id);
+                        log.DebugFormat("Assembly Loaded {0}", id);
                     }
 
                 }
@@ -112,7 +114,7 @@ namespace FlowEngine.Loader
             String currentId = activity.Attributes["id"].Value;
             IActivity toExecute = _activities[currentId];
 
-            Console.WriteLine("executing activity [{0}]", toExecute.getId());
+            log.DebugFormat("executing activity [{0}]", toExecute.getId());
             IResult currentResult = toExecute.run();
 
             ActivityReturn activityReturn = null;
@@ -123,18 +125,18 @@ namespace FlowEngine.Loader
                 object resultValue = currentResult.getData()[returnField];
                 if (resultValue != null)
                 {
-                    Console.WriteLine("activity {0} return {1} with type {2}", currentId, resultValue, returnType);
+                    log.DebugFormat("activity {0} return {1} with type {2}", currentId, resultValue, returnType);
                     activityReturn = new ActivityReturn(currentId, returnField, resultValue, returnType);
                 }
             }
 
             if (currentResult.getStatus().Equals(ResultStatus.SUCCESS))
             {
-                Console.WriteLine("Success!");
+                log.DebugFormat("Success >> {0}", currentId);
             }
             else
             {
-                Console.WriteLine("Error! {0}", currentResult.getException().Message);
+                log.DebugFormat("Error! >> {0}", currentResult.getException().Message);
             }
             return activityReturn;
         }
@@ -203,7 +205,7 @@ namespace FlowEngine.Loader
             foreach (var item in list)
             {
                 //TODO: execute recursive the activity inside this block
-                Console.WriteLine("Item: {0}", item);
+                log.DebugFormat("Item: {0}", item);
             }
         }
 
