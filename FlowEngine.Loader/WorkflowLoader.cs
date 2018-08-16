@@ -17,7 +17,7 @@ namespace FlowEngine.Loader
         private String _libPath;
         private XmlDocument _doc = new XmlDocument();
         private IDictionary<object, IActivity> _activities = new Dictionary<object, IActivity>();
-        private IDictionary<object, object> _resultsMap = new Dictionary<object, object>();
+        private IDictionary<object, ActivityReturn> _inMemoryActivityReturn = new Dictionary<object, ActivityReturn>();
 
         public WorkflowLoader(String workflowPath)
         {
@@ -57,43 +57,41 @@ namespace FlowEngine.Loader
         public void runWorkflow()
         {
             XmlNodeList execution = this._doc.DocumentElement.SelectNodes("Execution/*");
+            runRecursive(execution);
+        }
+
+        private void runRecursive(XmlNodeList execution)
+        {
             foreach (XmlNode line in execution)
             {
-                if (line.Name.Equals("Activity"))
+                switch (line.Name)
                 {
-                    XmlNode activity = line;
-
-                    object currentId = activity.Attributes["id"].Value;
-                    IActivity toExecute = _activities[currentId];
-
-                    Console.WriteLine("executing activity [{0}]", toExecute.getId());
-                    IResult currentResult = toExecute.run();
-
-                    String returnField = activity.Attributes["return"].Value;
-                    if (!String.IsNullOrEmpty(returnField))
-                    {
-                        String returnType = activity.Attributes["return-type"].Value;
-                        object resultValue = currentResult.getData()[returnField];
-                        if (resultValue != null)
+                    case "Activity":
+                        ActivityReturn result = this.executeActivity(line);
+                        if (result != null)
                         {
-                            Console.WriteLine("activity {0} return {1} with type {2}", currentId, resultValue, returnType);
-
-                            // pull value from this result map using the ff attributes
-                            // select="<field name>" from="<activity id>"
-                            this._resultsMap.Add(currentId, resultValue);
+                            this._inMemoryActivityReturn.Add(result.ActivityId, result);
                         }
-                    }
-
-                    if (currentResult.getStatus().Equals(ResultStatus.SUCCESS))
-                    {
-                        Console.WriteLine("Success!");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Error! {0}", currentResult.getException().Message);
-                    }
-
-
+                        break;
+                    case "If":
+                        ConditionResult conditionResult = this.assertCondition(line);
+                        if (conditionResult.Result)
+                        {
+                            if (conditionResult.DoNodes != null)
+                            {
+                                runRecursive(conditionResult.DoNodes);
+                            }
+                        }
+                        else
+                        {
+                            if (conditionResult.ElseNodes != null)
+                            {
+                                runRecursive(conditionResult.ElseNodes);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -101,6 +99,80 @@ namespace FlowEngine.Loader
         public void setLibPath(String libPath)
         {
             this._libPath = libPath;
+        }
+
+        private ActivityReturn executeActivity(XmlNode activityNode)
+        {
+            XmlNode activity = activityNode;
+
+            String currentId = activity.Attributes["id"].Value;
+            IActivity toExecute = _activities[currentId];
+
+            Console.WriteLine("executing activity [{0}]", toExecute.getId());
+            IResult currentResult = toExecute.run();
+
+            ActivityReturn activityReturn = null;
+            if (activity.Attributes["return"] != null)
+            {
+                String returnField = activity.Attributes["return"].Value;
+                String returnType = activity.Attributes["return-type"].Value;
+                String resultValue = currentResult.getData()[returnField].ToString();
+                if (resultValue != null)
+                {
+                    Console.WriteLine("activity {0} return {1} with type {2}", currentId, resultValue, returnType);
+                    activityReturn = new ActivityReturn(currentId, returnField, resultValue, returnType);
+                }
+            }
+
+            if (currentResult.getStatus().Equals(ResultStatus.SUCCESS))
+            {
+                Console.WriteLine("Success!");
+            }
+            else
+            {
+                Console.WriteLine("Error! {0}", currentResult.getException().Message);
+            }
+            return activityReturn;
+        }
+
+        private ConditionResult assertCondition(XmlNode condition)
+        {
+            ConditionResult _assertResult = null;
+
+            object activityIdToAssert = condition.Attributes["activityId"].Value;
+            object expectedValue = condition.Attributes["value"].Value;
+            string conditionType = condition.Attributes["condition"].Value;
+
+            ActivityReturn activityReturn = this._inMemoryActivityReturn[activityIdToAssert];
+            if (activityReturn == null)
+            {
+                throw new Exception("Could not assert [null] activity return.");
+            }
+
+            if (activityReturn.ReturnValue == null)
+            {
+                throw new Exception("Could not assert null return value.");
+            }
+
+            switch (conditionType)
+            {
+                case "EqualsTo":
+                    _assertResult = new ConditionResult(expectedValue.Equals(activityReturn.ReturnValue), parseDoNodes(condition), parseElseNodes(condition));
+                    break;
+                default:
+                    break;
+            }
+            return _assertResult;
+        }
+
+        private XmlNodeList parseDoNodes(XmlNode node)
+        {
+            return node.SelectNodes("Do/*");
+        }
+
+        private XmlNodeList parseElseNodes(XmlNode node)
+        {
+            return node.SelectNodes("Else/*");
         }
 
     }
