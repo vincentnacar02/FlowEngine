@@ -16,6 +16,8 @@ namespace FlowEngine
             loader.setLibPath(AppSettings.get("LibPath"));
             loader.LoadActivities();
             loader.runWorkflow();
+
+            Console.ReadLine();
         }
     }
 }

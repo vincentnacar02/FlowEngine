@@ -17,6 +17,7 @@ namespace FlowEngine.Loader
         private String _libPath;
         private XmlDocument _doc = new XmlDocument();
         private IDictionary<object, IActivity> _activities = new Dictionary<object, IActivity>();
+        private IDictionary<object, object> _resultsMap = new Dictionary<object, object>();
 
         public WorkflowLoader(String workflowPath)
         {
@@ -61,18 +62,38 @@ namespace FlowEngine.Loader
                 if (line.Name.Equals("Activity"))
                 {
                     XmlNode activity = line;
+
                     object currentId = activity.Attributes["id"].Value;
                     IActivity toExecute = _activities[currentId];
+
                     Console.WriteLine("executing activity [{0}]", toExecute.getId());
-                    IResult result1 = toExecute.run();
-                    if (result1.getStatus().Equals(ResultStatus.SUCCESS))
+                    IResult currentResult = toExecute.run();
+
+                    String returnField = activity.Attributes["return"].Value;
+                    if (!String.IsNullOrEmpty(returnField))
+                    {
+                        String returnType = activity.Attributes["return-type"].Value;
+                        object resultValue = currentResult.getData()[returnField];
+                        if (resultValue != null)
+                        {
+                            Console.WriteLine("activity {0} return {1} with type {2}", currentId, resultValue, returnType);
+
+                            // pull value from this result map using the ff attributes
+                            // select="<field name>" from="<activity id>"
+                            this._resultsMap.Add(currentId, resultValue);
+                        }
+                    }
+
+                    if (currentResult.getStatus().Equals(ResultStatus.SUCCESS))
                     {
                         Console.WriteLine("Success!");
                     }
                     else
                     {
-                        Console.WriteLine("Error! {0}", result1.getException().Message);
+                        Console.WriteLine("Error! {0}", currentResult.getException().Message);
                     }
+
+
                 }
             }
         }

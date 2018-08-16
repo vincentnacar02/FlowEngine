@@ -1,0 +1,4 @@
+﻿<Activity id="{ActivityId}" name="FileExist" assembly="Activity.FileExist.dll">
+  <Property name="FilePath" value="{String}" />
+  <!--return="IsExist" return-type="Boolean"-->
+</Activity>

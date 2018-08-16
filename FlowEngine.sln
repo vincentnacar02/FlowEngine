@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activity.CopyFile", "Activi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activity.DeleteFile", "Activity.DeleteFile\Activity.DeleteFile.csproj", "{A397CDCB-BD5A-4281-B31D-3AD78E5711E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activity.FileExist", "Activity.FileExist\Activity.FileExist.csproj", "{D1E5F1B3-AC0A-4C92-8B00-02C4FAAB588A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{A397CDCB-BD5A-4281-B31D-3AD78E5711E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A397CDCB-BD5A-4281-B31D-3AD78E5711E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A397CDCB-BD5A-4281-B31D-3AD78E5711E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1E5F1B3-AC0A-4C92-8B00-02C4FAAB588A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1E5F1B3-AC0A-4C92-8B00-02C4FAAB588A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1E5F1B3-AC0A-4C92-8B00-02C4FAAB588A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1E5F1B3-AC0A-4C92-8B00-02C4FAAB588A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,5 +67,6 @@ Global
 		{27879761-6232-45ED-AE1B-AAF80FDE1C26} = {F35B3BE3-FDFE-40D6-B97B-4743BF19C782}
 		{E71A1382-2A65-4E68-945A-156491E01F0D} = {F35B3BE3-FDFE-40D6-B97B-4743BF19C782}
 		{A397CDCB-BD5A-4281-B31D-3AD78E5711E5} = {F35B3BE3-FDFE-40D6-B97B-4743BF19C782}
+		{D1E5F1B3-AC0A-4C92-8B00-02C4FAAB588A} = {F35B3BE3-FDFE-40D6-B97B-4743BF19C782}
 	EndGlobalSection
 EndGlobal
