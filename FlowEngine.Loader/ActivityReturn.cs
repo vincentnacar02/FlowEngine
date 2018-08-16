@@ -10,10 +10,10 @@ namespace FlowEngine.Loader
     {
         public String ActivityId { get; set; }
         public String ReturnField { get; set; }
-        public String ReturnValue { get; set; }
+        public object ReturnValue { get; set; }
         public String ReturnType { get; set; }
 
-        public ActivityReturn(string activityId, string returnField, string returnValue, string returnType)
+        public ActivityReturn(string activityId, string returnField, object returnValue, string returnType)
         {
             ActivityId = activityId;
             ReturnField = returnField;

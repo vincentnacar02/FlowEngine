@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activity.DeleteFile", "Acti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activity.FileExist", "Activity.FileExist\Activity.FileExist.csproj", "{D1E5F1B3-AC0A-4C92-8B00-02C4FAAB588A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activity.ListFiles", "Activity.ListFiles\Activity.ListFiles.csproj", "{8F9EEA00-49FA-4319-A7E3-A7A7A1668750}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{D1E5F1B3-AC0A-4C92-8B00-02C4FAAB588A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1E5F1B3-AC0A-4C92-8B00-02C4FAAB588A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1E5F1B3-AC0A-4C92-8B00-02C4FAAB588A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F9EEA00-49FA-4319-A7E3-A7A7A1668750}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F9EEA00-49FA-4319-A7E3-A7A7A1668750}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F9EEA00-49FA-4319-A7E3-A7A7A1668750}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F9EEA00-49FA-4319-A7E3-A7A7A1668750}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,5 +74,6 @@ Global
 		{E71A1382-2A65-4E68-945A-156491E01F0D} = {F35B3BE3-FDFE-40D6-B97B-4743BF19C782}
 		{A397CDCB-BD5A-4281-B31D-3AD78E5711E5} = {F35B3BE3-FDFE-40D6-B97B-4743BF19C782}
 		{D1E5F1B3-AC0A-4C92-8B00-02C4FAAB588A} = {F35B3BE3-FDFE-40D6-B97B-4743BF19C782}
+		{8F9EEA00-49FA-4319-A7E3-A7A7A1668750} = {F35B3BE3-FDFE-40D6-B97B-4743BF19C782}
 	EndGlobalSection
 EndGlobal

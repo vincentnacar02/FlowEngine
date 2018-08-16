@@ -1,0 +1,3 @@
+﻿<Activity id="{ActivityId}" name="ListFiles" assembly="Activity.ListFiles.dll">
+  <Property name="DirectoryPath" value="{String}" />
+</Activity>

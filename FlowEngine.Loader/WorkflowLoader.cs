@@ -1,4 +1,5 @@
 ﻿using FlowEngine.Core;
+using FlowEngine.Loader.utils;
 using FlowEngine.SDK.interfaces;
 using FlowEngine.SDK.types;
 using System;
@@ -90,6 +91,9 @@ namespace FlowEngine.Loader
                             }
                         }
                         break;
+                    case "ForEach":
+                        this.executeForEach(line);
+                        break;
                     default:
                         break;
                 }
@@ -116,7 +120,7 @@ namespace FlowEngine.Loader
             {
                 String returnField = activity.Attributes["return"].Value;
                 String returnType = activity.Attributes["return-type"].Value;
-                String resultValue = currentResult.getData()[returnField].ToString();
+                object resultValue = currentResult.getData()[returnField];
                 if (resultValue != null)
                 {
                     Console.WriteLine("activity {0} return {1} with type {2}", currentId, resultValue, returnType);
@@ -157,7 +161,7 @@ namespace FlowEngine.Loader
             switch (conditionType)
             {
                 case "EqualsTo":
-                    _assertResult = new ConditionResult(expectedValue.Equals(activityReturn.ReturnValue), parseDoNodes(condition), parseElseNodes(condition));
+                    _assertResult = new ConditionResult(AssertionUtil.equals(expectedValue, activityReturn.ReturnValue), parseDoNodes(condition), parseElseNodes(condition));
                     break;
                 default:
                     break;
@@ -173,6 +177,34 @@ namespace FlowEngine.Loader
         private XmlNodeList parseElseNodes(XmlNode node)
         {
             return node.SelectNodes("Else/*");
+        }
+
+        private void executeForEach(XmlNode forEachNode)
+        {
+            object activityId = forEachNode.Attributes["activityId"].Value;
+
+            ActivityReturn activityReturn = this._inMemoryActivityReturn[activityId];
+            if (activityReturn == null)
+            {
+                throw new Exception("Could not do ForEach, [null] activity return.");
+            }
+
+            if (activityReturn.ReturnValue == null)
+            {
+                throw new Exception("Could not do ForEach, null return value.");
+            }
+
+            if (!activityReturn.ReturnType.Equals("List"))
+            {
+                throw new Exception("Could not do ForEach, expected return-type 'List'.");
+            }
+
+            IList<string> list = (IList<string>) activityReturn.ReturnValue;
+            foreach (var item in list)
+            {
+                //TODO: execute recursive the activity inside this block
+                Console.WriteLine("Item: {0}", item);
+            }
         }
 
     }

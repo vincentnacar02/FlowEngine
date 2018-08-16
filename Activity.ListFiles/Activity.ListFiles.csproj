@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{332B7102-7C27-4536-978E-C80AF681BFA5}</ProjectGuid>
+    <ProjectGuid>{8F9EEA00-49FA-4319-A7E3-A7A7A1668750}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FlowEngine.Loader</RootNamespace>
-    <AssemblyName>FlowEngine.Loader</AssemblyName>
+    <RootNamespace>Activity.ListFiles</RootNamespace>
+    <AssemblyName>Activity.ListFiles</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,10 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActivityReturn.cs" />
-    <Compile Include="ConditionResult.cs" />
-    <Compile Include="utils\AssertionUtil.cs" />
-    <Compile Include="WorkflowLoader.cs" />
+    <Compile Include="ListFiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +51,9 @@
       <Project>{36a70131-99e9-481a-bf33-5c8604bc388f}</Project>
       <Name>FlowEngine.SDK</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ListFiles.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
