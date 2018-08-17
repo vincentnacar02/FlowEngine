@@ -11,7 +11,7 @@ namespace FlowEngine.Core.output
     public class LoggerElement : AbstractElement
     {
         private string[] VALID_ATTRIBUTES = new string[] { "type", "value" };
-        private string[] REQUIRED_ATTRIBUTES = new string[] { "type", "to" };
+        private string[] REQUIRED_ATTRIBUTES = new string[] { "type", "value" };
 
         public LoggerElement(XmlNode node)
             : base(node.Attributes)

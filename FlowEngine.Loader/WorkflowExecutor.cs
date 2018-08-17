@@ -186,25 +186,20 @@ namespace FlowEngine.Executor
         {
             ConditionResult _assertResult = null;
 
-            object activityIdToAssert = condition.getAttribute("activityId").getValue();
+            string valueOF = condition.getAttribute("value-of").getValue().ToString();
             object expectedValue = condition.getAttribute("value").getValue();
             string conditionType = condition.getAttribute("condition").getValue().ToString();
 
-            ActivityReturn activityReturn = this._inMemoryActivityReturn[activityIdToAssert];
-            if (activityReturn == null)
+            object valueToCheck = resolveAssignableValue(valueOF);
+            if (valueToCheck == null)
             {
-                throw new Exception("Could not assert [null] activity return.");
-            }
-
-            if (activityReturn.ReturnValue == null)
-            {
-                throw new Exception("Could not assert null return value.");
+                throw new Exception("Could not assert [null] value-of.");
             }
 
             switch (conditionType)
             {
                 case "EqualsTo":
-                    _assertResult = new ConditionResult(AssertionUtil.equals(expectedValue, activityReturn.ReturnValue), condition.DoNodes, condition.ElseNodes);
+                    _assertResult = new ConditionResult(AssertionUtil.equals(expectedValue, valueToCheck), condition.DoNodes, condition.ElseNodes);
                     break;
                 default:
                     break;

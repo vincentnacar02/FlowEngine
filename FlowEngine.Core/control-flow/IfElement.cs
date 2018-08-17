@@ -18,8 +18,8 @@ namespace FlowEngine.Core.control_flow
         public IList<IElement> DoNodes { get; set; }
         public IList<IElement> ElseNodes { get; set; }
 
-        private string[] VALID_ATTRIBUTES = new string[] { "activityId", "condition", "value" };
-        private string[] REQUIRED_ATTRIBUTES = new string[] { "activityId", "condition", "value" };
+        private string[] VALID_ATTRIBUTES = new string[] { "value-of", "condition", "value" };
+        private string[] REQUIRED_ATTRIBUTES = new string[] { "value-of", "condition", "value" };
 
         public IfElement(XmlNode ifNode, IList<IElement> doNodes, IList<IElement> elseNodes)
             : base(ifNode.Attributes)
