@@ -63,9 +63,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FlowEngine.Loader\FlowEngine.Loader.csproj">
+    <ProjectReference Include="..\FlowEngine.Loader\FlowEngine.Executor.csproj">
       <Project>{332b7102-7c27-4536-978e-c80af681bfa5}</Project>
-      <Name>FlowEngine.Loader</Name>
+      <Name>FlowEngine.Executor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

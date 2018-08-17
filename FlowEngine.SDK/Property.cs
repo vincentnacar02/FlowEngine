@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlowEngine.Core
+namespace FlowEngine.SDK
 {
     public class Property : IProperty
     {

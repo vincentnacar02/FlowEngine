@@ -7,8 +7,8 @@
     <ProjectGuid>{332B7102-7C27-4536-978E-C80AF681BFA5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FlowEngine.Loader</RootNamespace>
-    <AssemblyName>FlowEngine.Loader</AssemblyName>
+    <RootNamespace>FlowEngine.Executor</RootNamespace>
+    <AssemblyName>FlowEngine.Executor</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

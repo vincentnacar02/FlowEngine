@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlowEngine.SDK
+namespace FlowEngine.Core.elements.interfaces
 {
-    public class FlowSDK
+    public interface IAttribute
     {
-
+        string getName();
+        object getValue();
     }
 }

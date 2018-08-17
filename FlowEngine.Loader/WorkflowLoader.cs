@@ -1,5 +1,5 @@
-﻿using FlowEngine.Core;
-using FlowEngine.Loader.utils;
+﻿using FlowEngine.Executor.utils;
+using FlowEngine.SDK;
 using FlowEngine.SDK.interfaces;
 using FlowEngine.SDK.types;
 using System;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace FlowEngine.Loader
+namespace FlowEngine.Executor
 {
     public class WorkflowLoader
     {

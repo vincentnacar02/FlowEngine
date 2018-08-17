@@ -39,12 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FlowSDK.cs" />
+    <Compile Include="Activity.cs" />
+    <Compile Include="ActivityResult.cs" />
     <Compile Include="interfaces\IActivity.cs" />
     <Compile Include="interfaces\IProperties.cs" />
     <Compile Include="interfaces\IProperty.cs" />
     <Compile Include="interfaces\IResult.cs" />
+    <Compile Include="Properties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Property.cs" />
     <Compile Include="types\ResultStatus.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

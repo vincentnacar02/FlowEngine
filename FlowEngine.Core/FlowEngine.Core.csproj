@@ -39,11 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Activity.cs" />
-    <Compile Include="ActivityResult.cs" />
-    <Compile Include="Properties.cs" />
+    <Compile Include="control-flow\AbstractControlFlow.cs" />
+    <Compile Include="control-flow\ForEachElement.cs" />
+    <Compile Include="control-flow\IfElement.cs" />
+    <Compile Include="control-flow\RepeatElement.cs" />
+    <Compile Include="ElementAttribute.cs" />
+    <Compile Include="elements\interfaces\IAttribute.cs" />
+    <Compile Include="elements\interfaces\IElement.cs" />
+    <Compile Include="elements\types\ControlFlowType.cs" />
+    <Compile Include="elements\types\ElementType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Property.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FlowEngine.SDK\FlowEngine.SDK.csproj">

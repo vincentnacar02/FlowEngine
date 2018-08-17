@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowEngine.SDK", "FlowEngin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowEngine.Core", "FlowEngine.Core\FlowEngine.Core.csproj", "{42150DE8-51DB-422B-956E-462BE43E9E44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowEngine.Loader", "FlowEngine.Loader\FlowEngine.Loader.csproj", "{332B7102-7C27-4536-978E-C80AF681BFA5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowEngine.Executor", "FlowEngine.Loader\FlowEngine.Executor.csproj", "{332B7102-7C27-4536-978E-C80AF681BFA5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Activities", "Activities", "{F35B3BE3-FDFE-40D6-B97B-4743BF19C782}"
 EndProject
