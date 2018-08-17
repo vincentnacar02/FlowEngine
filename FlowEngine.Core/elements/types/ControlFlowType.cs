@@ -9,11 +9,9 @@ namespace FlowEngine.Core.elements.types
     public enum ControlFlowType
     {
         If,
-        Else,
         ForEach,
         Repeat,
         While,
-        Switch,
-        Do
+        Switch
     }
 }

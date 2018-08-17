@@ -7,18 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace FlowEngine.Core.control_flow
+namespace FlowEngine.Core
 {
-    /// <summary>
-    /// AbstractControlFlow
-    /// @author: Vincent Nacar
-    /// </summary>
-    public abstract class AbstractControlFlow : IElement
+    public abstract class AbstractElement : IElement
     {
         private IDictionary<string, IAttribute> Attributes;
         private XmlAttributeCollection XmlAttributes;
 
-        public AbstractControlFlow(XmlAttributeCollection attributes)
+        public AbstractElement(XmlAttributeCollection attributes)
         {
             Attributes = new Dictionary<string, IAttribute>();
             XmlAttributes = attributes;
@@ -40,28 +36,23 @@ namespace FlowEngine.Core.control_flow
 
         public void ValidateRequiredAttributes()
         {
-            string[] _missingAttributes = new string[] { };
-            int i = 0;
+            string _missingAttribute = null;
             foreach (var attributeName in this.getRequiredAttributes())
             {
                 if (!this.Attributes.ContainsKey(attributeName))
                 {
-                    _missingAttributes[i] = attributeName;
-                    i++;
+                    _missingAttribute = attributeName;
                 }
             }
-            if (i > 0)
+            if (_missingAttribute != null)
             {
-                throw new Exception(string.Format("Missing attributes {0} in element {1}", string.Join(",", _missingAttributes), this.getElementName()));
+                throw new Exception(string.Format("Missing attribute {0} in element {1}", _missingAttribute, this.getElementName().ToString()));
             }
         }
 
         public abstract string getElementName();
 
-        public ElementType getType()
-        {
-            return ElementType.ControlFlow;
-        }
+        public abstract ElementType getType();
 
         public ICollection<IAttribute> getAttributes()
         {
@@ -77,12 +68,6 @@ namespace FlowEngine.Core.control_flow
             }
             return _attr;
         }
-
-        public abstract ControlFlowType getControlFlowType();
-
-        public abstract bool hasDoNodes();
-
-        public abstract bool hasElseNodes();
 
         public abstract string[] getValidAttributes();
 

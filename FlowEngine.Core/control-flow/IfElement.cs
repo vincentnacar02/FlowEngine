@@ -15,17 +15,22 @@ namespace FlowEngine.Core.control_flow
     /// </summary>
     public class IfElement : AbstractControlFlow
     {
-        public XmlNodeList DoNodes { get; set; }
-        public XmlNodeList ElseNodes { get; set; }
+        public IList<IElement> DoNodes { get; set; }
+        public IList<IElement> ElseNodes { get; set; }
 
         private string[] VALID_ATTRIBUTES = new string[] { "activityId", "condition", "value" };
         private string[] REQUIRED_ATTRIBUTES = new string[] { "activityId", "condition", "value" };
 
-        public IfElement(XmlNode ifNode, XmlNodeList doNodes, XmlNodeList elseNodes)
+        public IfElement(XmlNode ifNode, IList<IElement> doNodes, IList<IElement> elseNodes)
             : base(ifNode.Attributes)
         {
             this.DoNodes = doNodes;
             this.ElseNodes = elseNodes;
+        }
+
+        public override string getElementName()
+        {
+            return "If";
         }
 
         public override ControlFlowType getControlFlowType()
@@ -43,9 +48,9 @@ namespace FlowEngine.Core.control_flow
             return this.ElseNodes != null & this.ElseNodes.Count > 0;
         }
 
-        protected override bool validateAttribute(XmlAttribute attribute)
+        public override string[] getValidAttributes()
         {
-            return this.VALID_ATTRIBUTES.Contains(attribute.Name);
+            return this.VALID_ATTRIBUTES;
         }
 
         public override string[] getRequiredAttributes()

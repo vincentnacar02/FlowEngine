@@ -46,7 +46,7 @@
     <Compile Include="ActivityReturn.cs" />
     <Compile Include="ConditionResult.cs" />
     <Compile Include="utils\AssertionUtil.cs" />
-    <Compile Include="WorkflowLoader.cs" />
+    <Compile Include="WorkflowExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

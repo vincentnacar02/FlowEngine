@@ -16,10 +16,10 @@ namespace FlowEngine
         {
             String worflowPath = args[0];
             log.InfoFormat("FlowEngine execution start [{0}]", worflowPath);
-            WorkflowLoader loader = new WorkflowLoader(worflowPath);
-            loader.setLibPath(AppSettings.get("LibPath"));
-            loader.LoadActivities();
-            loader.runWorkflow();
+            WorkflowExecutor executor = new WorkflowExecutor(worflowPath);
+            executor.setLibPath(AppSettings.get("LibPath"));
+            executor.InitializeWorkflow();
+            executor.RunWorkflow();
             log.InfoFormat("FlowEngine execution finished [{0}]", worflowPath);
         }
     }

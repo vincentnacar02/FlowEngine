@@ -15,15 +15,20 @@ namespace FlowEngine.Core.control_flow
     /// </summary>
     public class RepeatElement : AbstractControlFlow
     {
-        public XmlNodeList DoNodes { get; set; }
+        public IList<IElement> DoNodes { get; set; }
 
         private string[] VALID_ATTRIBUTES = new string[] {"times"};
         private string[] REQUIRED_ATTRIBUTES = new string[] { "times" };
 
-        public RepeatElement(XmlNode node, XmlNodeList doNodes)
+        public RepeatElement(XmlNode node, IList<IElement> doNodes)
             : base(node.Attributes)
         {
             this.DoNodes = doNodes;
+        }
+
+        public override string getElementName()
+        {
+            return "Repeat";
         }
 
         public override ControlFlowType getControlFlowType()
@@ -41,9 +46,9 @@ namespace FlowEngine.Core.control_flow
             return false;
         }
 
-        protected override bool validateAttribute(XmlAttribute attribute)
+        public override string[] getValidAttributes()
         {
-            return this.VALID_ATTRIBUTES.Contains(attribute.Name);
+            return this.VALID_ATTRIBUTES;
         }
 
         public override string[] getRequiredAttributes()

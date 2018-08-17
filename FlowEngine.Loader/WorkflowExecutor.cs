@@ -1,4 +1,11 @@
-﻿using FlowEngine.Executor.utils;
+﻿using FlowEngine.Core;
+using FlowEngine.Core.activity;
+using FlowEngine.Core.container;
+using FlowEngine.Core.control_flow;
+using FlowEngine.Core.elements.interfaces;
+using FlowEngine.Core.input;
+using FlowEngine.Core.output;
+using FlowEngine.Executor.utils;
 using FlowEngine.SDK;
 using FlowEngine.SDK.interfaces;
 using FlowEngine.SDK.types;
@@ -13,7 +20,7 @@ using System.Xml;
 
 namespace FlowEngine.Executor
 {
-    public class WorkflowLoader
+    public class WorkflowExecutor
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -21,17 +28,30 @@ namespace FlowEngine.Executor
         private XmlDocument _doc = new XmlDocument();
         private IDictionary<object, IActivity> _activities = new Dictionary<object, IActivity>();
         private IDictionary<object, ActivityReturn> _inMemoryActivityReturn = new Dictionary<object, ActivityReturn>();
-        private IDictionary<string, object> _variableRegistry = new Dictionary<string, object>();
+        private IDictionary<object, object> _variableRegistry = new Dictionary<object, object>();
 
-        public WorkflowLoader(String workflowPath)
+        private Workflow _workflow;
+
+        public WorkflowExecutor(String workflowPath)
         {
             this._doc.Load(workflowPath);
         }
 
-        public void LoadActivities()
+        public void InitializeWorkflow()
         {
-            XmlNodeList activityNodes = this._doc.DocumentElement.SelectNodes("Activities/Activity");
-            foreach (XmlNode activity in activityNodes)
+            XmlNodeList settingsNode = this._doc.DocumentElement.SelectNodes("Settings/*");
+            XmlNodeList activitiesNode = this._doc.DocumentElement.SelectNodes("Activities/Activity");
+            XmlNodeList executionNode = this._doc.DocumentElement.SelectNodes("Execution/*");
+            this._workflow = new Workflow(settingsNode, activitiesNode, executionNode);
+
+            this.InitializeActivitiesBlock();
+
+            this._workflow.InitializeElements();
+        }
+
+        private void InitializeActivitiesBlock()
+        {
+            foreach (XmlNode activity in this._workflow.getActivitiesNode())
             {
                 if (activity.Attributes["assembly"].Value != null)
                 {
@@ -58,20 +78,19 @@ namespace FlowEngine.Executor
             }
         }
 
-        public void runWorkflow()
+        public void RunWorkflow()
         {
-            XmlNodeList execution = this._doc.DocumentElement.SelectNodes("Execution/*");
-            runRecursive(execution);
+            runRecursive(this._workflow.getExecutionElements());
         }
 
-        private void runRecursive(XmlNodeList execution)
+        private void runRecursive(IList<IElement> execution)
         {
-            foreach (XmlNode line in execution)
+            foreach (IElement line in execution)
             {
-                switch (line.Name)
+                switch (line.getElementName())
                 {
                     case "Activity":
-                        ActivityReturn result = this.executeActivity(line);
+                        ActivityReturn result = this.executeActivity((ActivityElement) line);
                         if (result != null)
                         {
                             if (this._inMemoryActivityReturn.ContainsKey(result.ActivityId))
@@ -82,7 +101,7 @@ namespace FlowEngine.Executor
                         }
                         break;
                     case "If":
-                        ConditionResult conditionResult = this.assertCondition(line);
+                        ConditionResult conditionResult = this.assertCondition((IfElement) line);
                         if (conditionResult.Result)
                         {
                             if (conditionResult.DoNodes != null)
@@ -99,19 +118,19 @@ namespace FlowEngine.Executor
                         }
                         break;
                     case "ForEach":
-                        this.executeForEach(line);
+                        this.executeForEach((ForEachElement) line);
                         break;
                     case "Assign":
-                        this.executeAssign(line);
+                        this.executeAssign((AssignElement) line);
                         break;
                     case "Variable":
-                        this.createVariable(line);
+                        this.createVariable((VariableElement) line);
                         break;
                     case "Logger":
-                        this.executeLogger(line);
+                        this.executeLogger((LoggerElement) line);
                         break;
                     case "Repeat":
-                        this.executeRepeat(line);
+                        this.executeRepeat((RepeatElement) line);
                         break;
                     default:
                         break;
@@ -119,10 +138,10 @@ namespace FlowEngine.Executor
             }
         }
 
-        private void createVariable(XmlNode variableNode)
+        private void createVariable(VariableElement variableNode)
         {
-            string name = variableNode.Attributes["name"].Value;
-            object value = variableNode.Attributes["value"].Value;
+            object name = variableNode.getAttribute("name").getValue();
+            object value = variableNode.getAttribute("value").getValue();
             _variableRegistry.Add(name, value);
         }
 
@@ -131,21 +150,19 @@ namespace FlowEngine.Executor
             this._libPath = libPath;
         }
 
-        private ActivityReturn executeActivity(XmlNode activityNode)
+        private ActivityReturn executeActivity(ActivityElement activityNode)
         {
-            XmlNode activity = activityNode;
-
-            String currentId = activity.Attributes["id"].Value;
+            String currentId = activityNode.getAttribute("id").getValue().ToString();
             IActivity toExecute = _activities[currentId];
 
             log.DebugFormat("executing activity [{0}]", toExecute.getId());
             IResult currentResult = toExecute.run();
 
             ActivityReturn activityReturn = null;
-            if (activity.Attributes["return"] != null)
+            if (activityNode.getAttribute("return") != null)
             {
-                String returnField = activity.Attributes["return"].Value;
-                String returnType = activity.Attributes["return-type"].Value;
+                String returnField = activityNode.getAttribute("return").getValue().ToString();
+                String returnType = activityNode.getAttribute("return-type").getValue().ToString();
                 object resultValue = currentResult.getData()[returnField];
                 if (resultValue != null)
                 {
@@ -156,22 +173,22 @@ namespace FlowEngine.Executor
 
             if (currentResult.getStatus().Equals(ResultStatus.SUCCESS))
             {
-                log.DebugFormat("Success >> {0}", currentId);
+                log.DebugFormat("Execute Activity success >> {0}", currentId);
             }
             else
             {
-                log.DebugFormat("Error! >> {0}", currentResult.getException().Message);
+                log.DebugFormat("Execute Activity[{0}] error >> {1}", currentId, currentResult.getException().Message);
             }
             return activityReturn;
         }
 
-        private ConditionResult assertCondition(XmlNode condition)
+        private ConditionResult assertCondition(IfElement condition)
         {
             ConditionResult _assertResult = null;
 
-            object activityIdToAssert = condition.Attributes["activityId"].Value;
-            object expectedValue = condition.Attributes["value"].Value;
-            string conditionType = condition.Attributes["condition"].Value;
+            object activityIdToAssert = condition.getAttribute("activityId").getValue();
+            object expectedValue = condition.getAttribute("value").getValue();
+            string conditionType = condition.getAttribute("condition").getValue().ToString();
 
             ActivityReturn activityReturn = this._inMemoryActivityReturn[activityIdToAssert];
             if (activityReturn == null)
@@ -187,7 +204,7 @@ namespace FlowEngine.Executor
             switch (conditionType)
             {
                 case "EqualsTo":
-                    _assertResult = new ConditionResult(AssertionUtil.equals(expectedValue, activityReturn.ReturnValue), parseDoNodes(condition), parseElseNodes(condition));
+                    _assertResult = new ConditionResult(AssertionUtil.equals(expectedValue, activityReturn.ReturnValue), condition.DoNodes, condition.ElseNodes);
                     break;
                 default:
                     break;
@@ -195,20 +212,10 @@ namespace FlowEngine.Executor
             return _assertResult;
         }
 
-        private XmlNodeList parseDoNodes(XmlNode node)
+        private void executeForEach(ForEachElement forEachNode)
         {
-            return node.SelectNodes("Do/*");
-        }
-
-        private XmlNodeList parseElseNodes(XmlNode node)
-        {
-            return node.SelectNodes("Else/*");
-        }
-
-        private void executeForEach(XmlNode forEachNode)
-        {
-            object activityId = forEachNode.Attributes["activityId"].Value;
-            string asVariableName = forEachNode.Attributes["as"].Value;
+            object activityId = forEachNode.getAttribute("activityId").getValue();
+            string asVariableName = forEachNode.getAttribute("as").getValue().ToString();
 
             ActivityReturn activityReturn = this._inMemoryActivityReturn[activityId];
             if (activityReturn == null)
@@ -230,7 +237,7 @@ namespace FlowEngine.Executor
             foreach (var item in list)
             {
                 _variableRegistry.Add(asVariableName, item);
-                XmlNodeList doNodes = parseDoNodes(forEachNode);
+                IList<IElement> doNodes = forEachNode.DoNodes;
                 //TODO: execute recursive the activity inside this block
                 log.DebugFormat("Item: {0}", item);
 
@@ -240,9 +247,9 @@ namespace FlowEngine.Executor
             }
         }
 
-        private void executeRepeat(XmlNode repeatNode)
+        private void executeRepeat(RepeatElement repeatNode)
         {
-            string repeatFor = repeatNode.Attributes["times"].Value;
+            string repeatFor = repeatNode.getAttribute("times").getValue().ToString();
 
             Int32 repeatTimes = 0;
             try
@@ -256,16 +263,16 @@ namespace FlowEngine.Executor
             
             for (int i = 0; i < repeatTimes; i++)
             {
-                XmlNodeList doNodes = parseDoNodes(repeatNode);
+                IList<IElement> doNodes = repeatNode.DoNodes;
                 runRecursive(doNodes);
             }
         }
 
-        private void executeAssign(XmlNode assignNode)
+        private void executeAssign(AssignElement assignNode)
         {
-            string assignType = assignNode.Attributes["type"].Value;
-            string assignTo = assignNode.Attributes["to"].Value;
-            string assignFrom = assignNode.Attributes["from"].Value;
+            string assignType = assignNode.getAttribute("type").getValue().ToString();
+            string assignTo = assignNode.getAttribute("to").getValue().ToString();
+            string assignFrom = assignNode.getAttribute("from").getValue().ToString();
 
             switch (assignType)
             {
@@ -302,13 +309,17 @@ namespace FlowEngine.Executor
                 ActivityReturn activityReturn = _inMemoryActivityReturn[activityId];
                 value = activityReturn.ReturnValue;
             }
+            else
+            {
+                value = assignFrom;
+            }
             return value;
         }
 
-        private void executeLogger(XmlNode loggerNode)
+        private void executeLogger(LoggerElement loggerNode)
         {
-            string logType = loggerNode.Attributes["type"].Value;
-            string logValue = loggerNode.Attributes["value"].Value;
+            string logType = loggerNode.getAttribute("type").getValue().ToString();
+            string logValue = loggerNode.getAttribute("value").getValue().ToString();
             switch (logType)
             {
                 case "Info":

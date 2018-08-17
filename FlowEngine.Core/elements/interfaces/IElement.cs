@@ -10,6 +10,7 @@ namespace FlowEngine.Core.elements.interfaces
     public interface IElement
     {
         ElementType getType();
+        string getElementName();
         ICollection<IAttribute> getAttributes();
         IAttribute getAttribute(string name);
 
