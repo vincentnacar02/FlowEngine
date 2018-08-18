@@ -23,6 +23,7 @@ namespace FlowEngine.Executor
     public class WorkflowExecutor
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog logger = log4net.LogManager.GetLogger("workflow-logger");
 
         private String _libPath;
         private XmlDocument _doc = new XmlDocument();
@@ -39,6 +40,7 @@ namespace FlowEngine.Executor
 
         public void InitializeWorkflow()
         {
+            log.Debug("Initialize workflow");
             XmlNodeList settingsNode = this._doc.DocumentElement.SelectNodes("Settings/*");
             XmlNodeList activitiesNode = this._doc.DocumentElement.SelectNodes("Activities/Activity");
             XmlNodeList executionNode = this._doc.DocumentElement.SelectNodes("Execution/*");
@@ -318,10 +320,10 @@ namespace FlowEngine.Executor
             switch (logType)
             {
                 case "Info":
-                    log.Info(resolveAssignableValue(logValue));
+                    logger.Info(resolveAssignableValue(logValue));
                     break;
                 case "Debug":
-                    log.Debug(resolveAssignableValue(logValue));
+                    logger.Debug(resolveAssignableValue(logValue));
                     break;
                 default:
                     break;
