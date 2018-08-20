@@ -1,0 +1,11 @@
+﻿<Activity id="{ActivityId}" name="SMTPSendEmail" assembly="Activity.SMTPSendEmail.dll">
+  <Property name="MailFrom" value="{String}" />
+  <Property name="SmtpServer" value="{String}" />
+  <Property name="SmtpUserName" value="{String}" />
+  <Property name="SmtpPassword" value="{String}" />
+  <Property name="SmtpEnableSsl" value="{Boolean}" />
+  <Property name="SmtpPort" value="{Integer}" />
+  <Property name="MailTo" value="{String}" />
+  <Property name="Subject" value="{String}" />
+  <Property name="Body" value="{String}" />  
+</Activity>

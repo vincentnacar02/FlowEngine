@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activity.ListFiles", "Activ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activity.FileInfo", "Activity.FileInfo\Activity.FileInfo.csproj", "{95A1D4BB-1EC2-43A7-BB4B-BEACB6AE14C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activity.SMTPSendEmail", "Activity.SMTPSendEmail\Activity.SMTPSendEmail.csproj", "{CC59F9D8-9F50-4976-9BE2-FAA33DBC6621}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{95A1D4BB-1EC2-43A7-BB4B-BEACB6AE14C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95A1D4BB-1EC2-43A7-BB4B-BEACB6AE14C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95A1D4BB-1EC2-43A7-BB4B-BEACB6AE14C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC59F9D8-9F50-4976-9BE2-FAA33DBC6621}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC59F9D8-9F50-4976-9BE2-FAA33DBC6621}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC59F9D8-9F50-4976-9BE2-FAA33DBC6621}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC59F9D8-9F50-4976-9BE2-FAA33DBC6621}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,5 +88,6 @@ Global
 		{D1E5F1B3-AC0A-4C92-8B00-02C4FAAB588A} = {F35B3BE3-FDFE-40D6-B97B-4743BF19C782}
 		{8F9EEA00-49FA-4319-A7E3-A7A7A1668750} = {F35B3BE3-FDFE-40D6-B97B-4743BF19C782}
 		{95A1D4BB-1EC2-43A7-BB4B-BEACB6AE14C0} = {F35B3BE3-FDFE-40D6-B97B-4743BF19C782}
+		{CC59F9D8-9F50-4976-9BE2-FAA33DBC6621} = {F35B3BE3-FDFE-40D6-B97B-4743BF19C782}
 	EndGlobalSection
 EndGlobal
