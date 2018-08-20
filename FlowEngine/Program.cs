@@ -15,7 +15,7 @@ namespace FlowEngine
         static void Main(string[] args)
         {
             String worflowPath = args[0];
-            log.InfoFormat("FlowEngine execution start [{0}]", worflowPath);
+            log.InfoFormat("FlowEngine loading start [{0}]", worflowPath);
             WorkflowExecutor executor = new WorkflowExecutor(worflowPath);
             executor.setLibPath(AppSettings.get("LibPath"));
             executor.InitializeWorkflow();

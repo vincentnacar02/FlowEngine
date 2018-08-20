@@ -67,7 +67,7 @@ namespace FlowEngine.Executor
 
                     String libName = activity.Attributes["assembly"].Value;
                     String assemblyPath = Path.Combine(this._libPath, libName);
-                    Console.WriteLine("Loading assembly {0}", assemblyPath);
+                    log.DebugFormat("Loading assembly {0}", assemblyPath);
                     var DLL = Assembly.LoadFile(assemblyPath);
                     foreach (Type type in DLL.GetExportedTypes())
                     {
@@ -82,7 +82,13 @@ namespace FlowEngine.Executor
 
         public void RunWorkflow()
         {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+
             runRecursive(this._workflow.getExecutionElements());
+            
+            watch.Stop();
+
+            log.DebugFormat("Workflow execution finished. Elapsed Time : {0}", watch.Elapsed);
         }
 
         private void runRecursive(IList<IElement> execution)
