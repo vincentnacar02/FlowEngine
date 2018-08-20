@@ -224,7 +224,7 @@ namespace FlowEngine.Executor
             string asVariableName = forEachNode.getAttribute("as").getValue().ToString();
 
             object selectedValue = this._AttributeSelector.valueOf(valueOf);
-            if (valueOf == null)
+            if (selectedValue == null)
             {
                 throw new Exception("Could not do ForEach, [null] activity return.");
             }
