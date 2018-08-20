@@ -21,5 +21,19 @@ namespace FlowEngine.Executor.utils
             }
             return eqResult;
         }
+
+        public static Boolean notEquals(object expectedValue, object actualValue)
+        {
+            Boolean eqResult = false;
+            if (actualValue.GetType() == typeof(Boolean))
+            {
+                eqResult = Convert.ToBoolean(expectedValue) != (Boolean)actualValue;
+            }
+            else if (actualValue.GetType() == typeof(String))
+            {
+                eqResult = !expectedValue.Equals(actualValue);
+            }
+            return eqResult;
+        }
     }
 }

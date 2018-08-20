@@ -242,6 +242,15 @@ namespace FlowEngine.Executor
                         }
                     }
                     break;
+                case "NotEqualsTo":
+                    while (AssertionUtil.notEquals(expectedValue, valueToCheck))
+                    {
+                        if (whileNode.hasDoNodes())
+                        {
+                            runRecursive(whileNode.DoNodes);
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
