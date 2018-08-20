@@ -63,12 +63,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FlowEngine.Loader\FlowEngine.Executor.csproj">
+    <ProjectReference Include="..\FlowEngine.Executor\FlowEngine.Executor.csproj">
       <Project>{332b7102-7c27-4536-978e-c80af681bfa5}</Project>
       <Name>FlowEngine.Executor</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

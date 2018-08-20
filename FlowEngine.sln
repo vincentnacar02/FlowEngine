@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowEngine.SDK", "FlowEngin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowEngine.Core", "FlowEngine.Core\FlowEngine.Core.csproj", "{42150DE8-51DB-422B-956E-462BE43E9E44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowEngine.Executor", "FlowEngine.Loader\FlowEngine.Executor.csproj", "{332B7102-7C27-4536-978E-C80AF681BFA5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Activities", "Activities", "{F35B3BE3-FDFE-40D6-B97B-4743BF19C782}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activity.CopyFile", "Activities\Activity.CopyFile\Activity.CopyFile.csproj", "{E71A1382-2A65-4E68-945A-156491E01F0D}"
@@ -26,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activity.MoveFile", "Activities\Activity.MoveFile\Activity.MoveFile.csproj", "{27879761-6232-45ED-AE1B-AAF80FDE1C26}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activity.SMTPSendEmail", "Activities\Activity.SMTPSendEmail\Activity.SMTPSendEmail.csproj", "{CC59F9D8-9F50-4976-9BE2-FAA33DBC6621}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowEngine.Executor", "FlowEngine.Executor\FlowEngine.Executor.csproj", "{332B7102-7C27-4536-978E-C80AF681BFA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +45,6 @@ Global
 		{42150DE8-51DB-422B-956E-462BE43E9E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42150DE8-51DB-422B-956E-462BE43E9E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42150DE8-51DB-422B-956E-462BE43E9E44}.Release|Any CPU.Build.0 = Release|Any CPU
-		{332B7102-7C27-4536-978E-C80AF681BFA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{332B7102-7C27-4536-978E-C80AF681BFA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{332B7102-7C27-4536-978E-C80AF681BFA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{332B7102-7C27-4536-978E-C80AF681BFA5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E71A1382-2A65-4E68-945A-156491E01F0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E71A1382-2A65-4E68-945A-156491E01F0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E71A1382-2A65-4E68-945A-156491E01F0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -77,6 +73,10 @@ Global
 		{CC59F9D8-9F50-4976-9BE2-FAA33DBC6621}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC59F9D8-9F50-4976-9BE2-FAA33DBC6621}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC59F9D8-9F50-4976-9BE2-FAA33DBC6621}.Release|Any CPU.Build.0 = Release|Any CPU
+		{332B7102-7C27-4536-978E-C80AF681BFA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{332B7102-7C27-4536-978E-C80AF681BFA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{332B7102-7C27-4536-978E-C80AF681BFA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{332B7102-7C27-4536-978E-C80AF681BFA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
