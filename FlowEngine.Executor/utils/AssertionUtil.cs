@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlowEngine.Executor.types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,24 @@ namespace FlowEngine.Executor.utils
 {
     public class AssertionUtil
     {
-        public static Boolean equals(object expectedValue, object actualValue)
+        public static Boolean AssertCondition(ConditionType condition, object expectedValue, object actualValue)
+        {
+            Boolean result = false;
+            switch (condition)
+            {
+                case ConditionType.EqualsTo:
+                    result = AssertionUtil.equals(expectedValue, actualValue);
+                    break;
+                case ConditionType.NotEqualsTo:
+                    result = AssertionUtil.notEquals(expectedValue, actualValue);
+                    break;
+                default:
+                    break;
+            }
+            return result;
+        }
+
+        private static Boolean equals(object expectedValue, object actualValue)
         {
             Boolean eqResult = false;
             if (actualValue.GetType() == typeof(Boolean))
@@ -22,7 +40,7 @@ namespace FlowEngine.Executor.utils
             return eqResult;
         }
 
-        public static Boolean notEquals(object expectedValue, object actualValue)
+        private static Boolean notEquals(object expectedValue, object actualValue)
         {
             Boolean eqResult = false;
             if (actualValue.GetType() == typeof(Boolean))

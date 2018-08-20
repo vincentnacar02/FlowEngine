@@ -5,6 +5,7 @@ using FlowEngine.Core.control_flow;
 using FlowEngine.Core.elements.interfaces;
 using FlowEngine.Core.input;
 using FlowEngine.Core.output;
+using FlowEngine.Executor.types;
 using FlowEngine.Executor.utils;
 using FlowEngine.SDK;
 using FlowEngine.SDK.interfaces;
@@ -207,13 +208,17 @@ namespace FlowEngine.Executor
                 throw new Exception("Could not assert [null] value-of.");
             }
 
-            switch (conditionType)
+            try
             {
-                case "EqualsTo":
-                    _assertResult = new ConditionResult(AssertionUtil.equals(expectedValue, valueToCheck), condition.DoNodes, condition.ElseNodes);
-                    break;
-                default:
-                    break;
+                ConditionType _condition = EnumUtil.Parse<ConditionType>(conditionType);
+                _assertResult = new ConditionResult(
+                        AssertionUtil.AssertCondition(_condition, expectedValue, valueToCheck),
+                        condition.DoNodes,
+                        condition.ElseNodes);
+            }
+            catch (Exception ex)
+            { 
+                throw ex;
             }
             return _assertResult;
         }
@@ -231,28 +236,20 @@ namespace FlowEngine.Executor
                 throw new Exception("Could not assert [null] value-of.");
             }
 
-            switch (conditionType)
+            try
             {
-                case "EqualsTo":
-                    while (AssertionUtil.equals(expectedValue, valueToCheck))
+                ConditionType _condition = EnumUtil.Parse<ConditionType>(conditionType);
+                while (AssertionUtil.AssertCondition(_condition, expectedValue, valueToCheck))
+                {
+                    if (whileNode.hasDoNodes())
                     {
-                        if (whileNode.hasDoNodes())
-                        {
-                            runRecursive(whileNode.DoNodes);
-                        }
+                        runRecursive(whileNode.DoNodes);
                     }
-                    break;
-                case "NotEqualsTo":
-                    while (AssertionUtil.notEquals(expectedValue, valueToCheck))
-                    {
-                        if (whileNode.hasDoNodes())
-                        {
-                            runRecursive(whileNode.DoNodes);
-                        }
-                    }
-                    break;
-                default:
-                    break;
+                }
+            }
+            catch (Exception ex)
+            { 
+                throw ex;
             }
         }
 
