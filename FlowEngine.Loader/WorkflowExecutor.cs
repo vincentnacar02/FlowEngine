@@ -218,6 +218,35 @@ namespace FlowEngine.Executor
             return _assertResult;
         }
 
+        // TODO: test
+        private void executeWhile(WhileElement whileNode)
+        {
+            string valueOF = whileNode.getAttribute("value-of").getValue().ToString();
+            object expectedValue = whileNode.getAttribute("value").getValue();
+            string conditionType = whileNode.getAttribute("condition").getValue().ToString();
+
+            object valueToCheck = this._AttributeSelector.valueOf(valueOF);
+            if (valueToCheck == null)
+            {
+                throw new Exception("Could not assert [null] value-of.");
+            }
+
+            switch (conditionType)
+            {
+                case "EqualsTo":
+                    while (AssertionUtil.equals(expectedValue, valueToCheck))
+                    {
+                        if (whileNode.hasDoNodes())
+                        {
+                            runRecursive(whileNode.DoNodes);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private void executeForEach(ForEachElement forEachNode)
         {
             string valueOf = forEachNode.getAttribute("value-of").getValue().ToString();

@@ -46,6 +46,7 @@
     <Compile Include="control-flow\ForEachElement.cs" />
     <Compile Include="control-flow\IfElement.cs" />
     <Compile Include="control-flow\RepeatElement.cs" />
+    <Compile Include="control-flow\WhileElement.cs" />
     <Compile Include="ElementAttribute.cs" />
     <Compile Include="ElementFactory.cs" />
     <Compile Include="elements\interfaces\IAttribute.cs" />
