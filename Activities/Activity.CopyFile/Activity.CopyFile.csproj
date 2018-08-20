@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8F9EEA00-49FA-4319-A7E3-A7A7A1668750}</ProjectGuid>
+    <ProjectGuid>{E71A1382-2A65-4E68-945A-156491E01F0D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Activity.ListFiles</RootNamespace>
-    <AssemblyName>Activity.ListFiles</AssemblyName>
+    <RootNamespace>Activity.CopyFile</RootNamespace>
+    <AssemblyName>Activity.CopyFile</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,21 +39,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ListFiles.cs" />
+    <Compile Include="CopyFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FlowEngine.Core\FlowEngine.Core.csproj">
+    <Content Include="CopyFile.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\FlowEngine.Core\FlowEngine.Core.csproj">
       <Project>{42150de8-51db-422b-956e-462be43e9e44}</Project>
       <Name>FlowEngine.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FlowEngine.SDK\FlowEngine.SDK.csproj">
+    <ProjectReference Include="..\..\FlowEngine.SDK\FlowEngine.SDK.csproj">
       <Project>{36a70131-99e9-481a-bf33-5c8604bc388f}</Project>
       <Name>FlowEngine.SDK</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ListFiles.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -48,11 +48,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FlowEngine.Core\FlowEngine.Core.csproj">
+    <ProjectReference Include="..\..\FlowEngine.Core\FlowEngine.Core.csproj">
       <Project>{42150de8-51db-422b-956e-462be43e9e44}</Project>
       <Name>FlowEngine.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FlowEngine.SDK\FlowEngine.SDK.csproj">
+    <ProjectReference Include="..\..\FlowEngine.SDK\FlowEngine.SDK.csproj">
       <Project>{36a70131-99e9-481a-bf33-5c8604bc388f}</Project>
       <Name>FlowEngine.SDK</Name>
     </ProjectReference>
