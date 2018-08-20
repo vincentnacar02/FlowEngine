@@ -17,8 +17,8 @@ namespace FlowEngine.Core.control_flow
     {
         public IList<IElement> DoNodes { get; set; }
 
-        private string[] VALID_ATTRIBUTES = new string[] { "activityId","as" };
-        private string[] REQUIRED_ATTRIBUTES = new string[] { "activityId", "as" };
+        private string[] VALID_ATTRIBUTES = new string[] { "value-of", "as" };
+        private string[] REQUIRED_ATTRIBUTES = new string[] { "value-of", "as" };
 
         public ForEachElement(XmlNode node, IList<IElement> doNodes)
             : base(node.Attributes)

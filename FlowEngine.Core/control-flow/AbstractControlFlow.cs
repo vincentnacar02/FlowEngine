@@ -40,19 +40,17 @@ namespace FlowEngine.Core.control_flow
 
         public void ValidateRequiredAttributes()
         {
-            string[] _missingAttributes = new string[] { };
-            int i = 0;
+            string _missingAttribute = null;
             foreach (var attributeName in this.getRequiredAttributes())
             {
                 if (!this.Attributes.ContainsKey(attributeName))
                 {
-                    _missingAttributes[i] = attributeName;
-                    i++;
+                    _missingAttribute = attributeName;
                 }
             }
-            if (i > 0)
+            if (_missingAttribute != null)
             {
-                throw new Exception(string.Format("Missing attributes {0} in element {1}", string.Join(",", _missingAttributes), this.getElementName()));
+                throw new Exception(string.Format("Missing attribute {0} in element {1}", _missingAttribute, this.getElementName().ToString()));
             }
         }
 

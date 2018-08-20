@@ -30,6 +30,7 @@ namespace FlowEngine.Executor
         private IDictionary<object, IActivity> _activities = new Dictionary<object, IActivity>();
         private IDictionary<object, ActivityReturn> _inMemoryActivityReturn = new Dictionary<object, ActivityReturn>();
         private IDictionary<object, object> _variableRegistry = new Dictionary<object, object>();
+        private _AttributeSelectorImpl _AttributeSelector;
 
         private Workflow _workflow;
 
@@ -49,6 +50,8 @@ namespace FlowEngine.Executor
             this.InitializeActivitiesBlock();
 
             this._workflow.InitializeElements();
+
+            this._AttributeSelector = new _AttributeSelectorImpl(this._variableRegistry, this._inMemoryActivityReturn);
         }
 
         private void InitializeActivitiesBlock()
@@ -198,7 +201,7 @@ namespace FlowEngine.Executor
             object expectedValue = condition.getAttribute("value").getValue();
             string conditionType = condition.getAttribute("condition").getValue().ToString();
 
-            object valueToCheck = resolveAssignableValue(valueOF);
+            object valueToCheck = this._AttributeSelector.valueOf(valueOF);
             if (valueToCheck == null)
             {
                 throw new Exception("Could not assert [null] value-of.");
@@ -217,32 +220,25 @@ namespace FlowEngine.Executor
 
         private void executeForEach(ForEachElement forEachNode)
         {
-            object activityId = forEachNode.getAttribute("activityId").getValue();
+            string valueOf = forEachNode.getAttribute("value-of").getValue().ToString();
             string asVariableName = forEachNode.getAttribute("as").getValue().ToString();
 
-            ActivityReturn activityReturn = this._inMemoryActivityReturn[activityId];
-            if (activityReturn == null)
+            object selectedValue = this._AttributeSelector.valueOf(valueOf);
+            if (valueOf == null)
             {
                 throw new Exception("Could not do ForEach, [null] activity return.");
             }
 
-            if (activityReturn.ReturnValue == null)
-            {
-                throw new Exception("Could not do ForEach, null return value.");
-            }
-
-            if (!activityReturn.ReturnType.Equals("List"))
+            if (selectedValue.GetType() != typeof(List<string>))
             {
                 throw new Exception("Could not do ForEach, expected return-type 'List'.");
             }
 
-            IList<string> list = (IList<string>) activityReturn.ReturnValue;
+            IList<string> list = (IList<string>) selectedValue;
             foreach (var item in list)
             {
                 _variableRegistry.Add(asVariableName, item);
                 IList<IElement> doNodes = forEachNode.DoNodes;
-                //TODO: execute recursive the activity inside this block
-                log.DebugFormat("Item: {0}", item);
 
                 runRecursive(doNodes);
 
@@ -286,37 +282,16 @@ namespace FlowEngine.Executor
                         IActivity activity = _activities[activityProperty[0]];
                         if (activity != null)
                         {
-                            activity.setPropertyValue(activityProperty[1], resolveAssignableValue(assignFrom));
+                            activity.setPropertyValue(activityProperty[1], this._AttributeSelector.valueOf(assignFrom));
                         }
                     }
                     break;
                 case "Variable":
-                    _variableRegistry[assignTo] = resolveAssignableValue(assignFrom);
+                    _variableRegistry[assignTo] = this._AttributeSelector.valueOf(assignFrom);
                     break;
                 default:
                     break;
             }
-        }
-
-        private object resolveAssignableValue(string assignFrom)
-        {
-            object value = null;
-            if (assignFrom.StartsWith("@") && assignFrom.EndsWith("@"))
-            {
-                string variableKey = assignFrom.Replace("@", "");
-                value = _variableRegistry[variableKey];
-            }
-            else if (assignFrom.StartsWith("[") && assignFrom.EndsWith("]"))
-            {
-                string activityId = assignFrom.Replace("[", "").Replace("]", "");
-                ActivityReturn activityReturn = _inMemoryActivityReturn[activityId];
-                value = activityReturn.ReturnValue;
-            }
-            else
-            {
-                value = assignFrom;
-            }
-            return value;
         }
 
         private void executeLogger(LoggerElement loggerNode)
@@ -326,13 +301,35 @@ namespace FlowEngine.Executor
             switch (logType)
             {
                 case "Info":
-                    logger.Info(resolveAssignableValue(logValue));
+                    logger.Info(this._AttributeSelector.valueOf(logValue));
                     break;
                 case "Debug":
-                    logger.Debug(resolveAssignableValue(logValue));
+                    logger.Debug(this._AttributeSelector.valueOf(logValue));
                     break;
                 default:
                     break;
+            }
+        }
+
+        class _AttributeSelectorImpl : AttributeSelector
+        {
+            private IDictionary<object, object> _VariableInstances;
+            private IDictionary<object, ActivityReturn> _ActivityInstances;
+
+            public _AttributeSelectorImpl(IDictionary<object, object> variableInstances, IDictionary<object, ActivityReturn> activityInstances)
+            {
+                this._VariableInstances = variableInstances;
+                this._ActivityInstances = activityInstances;
+            }
+
+            protected override IDictionary<object, object> getVariableRegistry()
+            {
+                return this._VariableInstances;
+            }
+
+            protected override IDictionary<object, ActivityReturn> getActivityInstances()
+            {
+                return this._ActivityInstances;
             }
         }
 
