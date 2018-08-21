@@ -1,4 +1,5 @@
 ﻿using FlowEngine.SDK.interfaces;
+using FlowEngine.SDK.providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,5 +67,11 @@ namespace FlowEngine.SDK
         /// A hook that being called when initializing workflow
         /// </summary>
         public abstract void onInit();
+
+        /// <summary>
+        /// Provide an access to workflow global settings
+        /// </summary>
+        /// <param name="provider">provider</param>
+        public virtual void onInitSettings(SettingsProvider provider) { }
     }
 }

@@ -11,6 +11,7 @@ using FlowEngine.Executor.types;
 using FlowEngine.Executor.utils;
 using FlowEngine.SDK;
 using FlowEngine.SDK.interfaces;
+using FlowEngine.SDK.providers;
 using FlowEngine.SDK.types;
 using System;
 using System.Collections.Generic;
@@ -35,12 +36,14 @@ namespace FlowEngine.Executor
 
         private Workflow _workflow;
         private WorkflowStateProvider _stateProvider;
+        private SettingsProvider _settingsProvider;
 
         public WorkflowExecutor(String workflowPath)
         {
             this._doc.Load(workflowPath);
         }
 
+        //TODO: need to refactor
         public void InitializeWorkflow()
         {
             log.Debug("Initialize workflow");
@@ -52,11 +55,30 @@ namespace FlowEngine.Executor
             this._stateProvider = new WorkflowStateProvider();
             this._workflow.SetState(this._stateProvider);
 
+            this.InitializeGlobalSettings();
+
             this.InitializeActivities();
 
             this._workflow.InitializeElements();
 
             this._AttributeSelector = new _AttributeSelectorImpl(this._stateProvider.getVariables(), this._stateProvider.getActivityResults());
+        }
+
+        private void InitializeGlobalSettings()
+        {
+            IDictionary<string, object> _settings = new Dictionary<string, object>();
+            foreach (XmlNode setting in this._workflow.getSettingsNode())
+            {
+                string name = setting.Attributes[AttributeConstants.NAME].Value;
+                object value = setting.Attributes[AttributeConstants.VALUE].Value;
+                if (_settings.ContainsKey(name))
+                {
+                    throw new Exception(String.Format("Duplicate key is not allowed in global settings. Key: {0}", name));
+                }
+                log.DebugFormat("Adding setting [{0}] with value: {1}", name, value);
+                _settings.Add(name, value);
+            }
+            this._settingsProvider = new SettingsProvider(_settings);
         }
 
         private void InitializeActivities()
@@ -82,6 +104,8 @@ namespace FlowEngine.Executor
                         dynamic activity_instance = Activator.CreateInstance(type, id, props);
 
                         activity_instance.onInit();
+
+                        activity_instance.onInitSettings(this._settingsProvider);
 
                         this._stateProvider.getActivities().Add(id, activity_instance);
                         log.DebugFormat("Assembly Loaded {0}", id);

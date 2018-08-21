@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlowEngine.SDK.providers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,5 +20,7 @@ namespace FlowEngine.SDK.interfaces
 
         // lifecycle hooks
         void onInit();
+
+        void onInitSettings(SettingsProvider provider);
     }
 }
