@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace FlowEngine.SDK.interfaces
 {
+    /// <summary>
+    /// IActivity
+    /// </summary>
     public interface IActivity
     {
         object getId();
