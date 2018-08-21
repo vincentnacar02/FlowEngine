@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activity.SMTPSendEmail", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowEngine.Executor", "FlowEngine.Executor\FlowEngine.Executor.csproj", "{332B7102-7C27-4536-978E-C80AF681BFA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowEngine.Service", "FlowEngine.Service\FlowEngine.Service.csproj", "{7111EA0F-406A-4F40-8FF6-86B51BCDC3D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{332B7102-7C27-4536-978E-C80AF681BFA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{332B7102-7C27-4536-978E-C80AF681BFA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{332B7102-7C27-4536-978E-C80AF681BFA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7111EA0F-406A-4F40-8FF6-86B51BCDC3D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7111EA0F-406A-4F40-8FF6-86B51BCDC3D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7111EA0F-406A-4F40-8FF6-86B51BCDC3D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7111EA0F-406A-4F40-8FF6-86B51BCDC3D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
