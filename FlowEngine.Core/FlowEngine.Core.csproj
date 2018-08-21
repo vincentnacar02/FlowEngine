@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="AbstractElement.cs" />
     <Compile Include="activity\ActivityElement.cs" />
+    <Compile Include="constants\AttributeConstants.cs" />
     <Compile Include="container\VariableElement.cs" />
     <Compile Include="control-flow\AbstractControlFlow.cs" />
     <Compile Include="control-flow\ForEachElement.cs" />

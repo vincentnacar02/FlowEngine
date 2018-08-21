@@ -1,5 +1,6 @@
 ﻿using FlowEngine.Core;
 using FlowEngine.Core.activity;
+using FlowEngine.Core.constants;
 using FlowEngine.Core.container;
 using FlowEngine.Core.control_flow;
 using FlowEngine.Core.elements.interfaces;
@@ -62,17 +63,17 @@ namespace FlowEngine.Executor
         {
             foreach (XmlNode activity in this._workflow.getActivitiesNode())
             {
-                if (activity.Attributes["assembly"].Value != null)
+                if (activity.Attributes[AttributeConstants.ACTIVITY_ASSEMBLY].Value != null)
                 {
-                    String id = activity.Attributes["id"].Value;
+                    String id = activity.Attributes[AttributeConstants.ID].Value;
                     XmlNodeList activityProps = activity.SelectNodes("Property");
                     Properties props = new Properties();
                     foreach (XmlNode prop in activityProps)
                     {
-                        props.addProperty(new Property(prop.Attributes["name"].Value, prop.Attributes["value"].Value));
+                        props.addProperty(new Property(prop.Attributes[AttributeConstants.NAME].Value, prop.Attributes[AttributeConstants.VALUE].Value));
                     }
 
-                    String libName = activity.Attributes["assembly"].Value;
+                    String libName = activity.Attributes[AttributeConstants.ACTIVITY_ASSEMBLY].Value;
                     String assemblyPath = Path.Combine(this._libPath, libName);
                     log.DebugFormat("Loading assembly {0}", assemblyPath);
                     var DLL = Assembly.LoadFile(assemblyPath);
@@ -112,11 +113,11 @@ namespace FlowEngine.Executor
                         IResult result = this.executeActivity(activity);
                         if (result != null)
                         {
-                            if (this._stateProvider.getActivityResults().ContainsKey(activity.getAttribute("id").getValue()))
+                            if (this._stateProvider.getActivityResults().ContainsKey(activity.getAttribute(AttributeConstants.ID).getValue()))
                             {
-                                this._stateProvider.getActivityResults().Remove(activity.getAttribute("id").getValue());
+                                this._stateProvider.getActivityResults().Remove(activity.getAttribute(AttributeConstants.ID).getValue());
                             }
-                            this._stateProvider.getActivityResults().Add(activity.getAttribute("id").getValue(), result);
+                            this._stateProvider.getActivityResults().Add(activity.getAttribute(AttributeConstants.ID).getValue(), result);
                         }
                         break;
                     case "If":
@@ -159,8 +160,8 @@ namespace FlowEngine.Executor
 
         private void createVariable(VariableElement variableNode)
         {
-            object name = variableNode.getAttribute("name").getValue();
-            object value = variableNode.getAttribute("value").getValue();
+            object name = variableNode.getAttribute(AttributeConstants.NAME).getValue();
+            object value = variableNode.getAttribute(AttributeConstants.VALUE).getValue();
             this._stateProvider.getVariables().Add(name, value);
         }
 
@@ -171,7 +172,7 @@ namespace FlowEngine.Executor
 
         private IResult executeActivity(ActivityElement activityNode)
         {
-            String currentId = activityNode.getAttribute("id").getValue().ToString();
+            String currentId = activityNode.getAttribute(AttributeConstants.ID).getValue().ToString();
             IActivity toExecute = this._stateProvider.getActivities()[currentId];
 
             log.DebugFormat("executing activity [{0}]", toExecute.getId());
@@ -196,9 +197,9 @@ namespace FlowEngine.Executor
         {
             ConditionResult _assertResult = null;
 
-            string valueOF = condition.getAttribute("value-of").getValue().ToString();
-            object expectedValue = condition.getAttribute("value").getValue();
-            string conditionType = condition.getAttribute("condition").getValue().ToString();
+            string valueOF = condition.getAttribute(AttributeConstants.VALUE_OF).getValue().ToString();
+            object expectedValue = condition.getAttribute(AttributeConstants.VALUE).getValue();
+            string conditionType = condition.getAttribute(AttributeConstants.CONDITION).getValue().ToString();
 
             object valueToCheck = this._AttributeSelector.valueOf(valueOF);
             if (valueToCheck == null)
@@ -224,9 +225,9 @@ namespace FlowEngine.Executor
         // TODO: test
         private void executeWhile(WhileElement whileNode)
         {
-            string valueOF = whileNode.getAttribute("value-of").getValue().ToString();
-            object expectedValue = whileNode.getAttribute("value").getValue();
-            string conditionType = whileNode.getAttribute("condition").getValue().ToString();
+            string valueOF = whileNode.getAttribute(AttributeConstants.VALUE_OF).getValue().ToString();
+            object expectedValue = whileNode.getAttribute(AttributeConstants.VALUE).getValue();
+            string conditionType = whileNode.getAttribute(AttributeConstants.CONDITION).getValue().ToString();
 
             object valueToCheck = this._AttributeSelector.valueOf(valueOF);
             if (valueToCheck == null)
@@ -253,8 +254,8 @@ namespace FlowEngine.Executor
 
         private void executeForEach(ForEachElement forEachNode)
         {
-            string valueOf = forEachNode.getAttribute("value-of").getValue().ToString();
-            string asVariableName = forEachNode.getAttribute("as").getValue().ToString();
+            string valueOf = forEachNode.getAttribute(AttributeConstants.VALUE_OF).getValue().ToString();
+            string asVariableName = forEachNode.getAttribute(AttributeConstants.AS).getValue().ToString();
 
             object selectedValue = this._AttributeSelector.valueOf(valueOf);
             if (selectedValue == null)
@@ -281,7 +282,7 @@ namespace FlowEngine.Executor
 
         private void executeRepeat(RepeatElement repeatNode)
         {
-            string repeatFor = repeatNode.getAttribute("times").getValue().ToString();
+            string repeatFor = repeatNode.getAttribute(AttributeConstants.TIMES).getValue().ToString();
 
             Int32 repeatTimes = 0;
             try
@@ -302,9 +303,9 @@ namespace FlowEngine.Executor
 
         private void executeAssign(AssignElement assignNode)
         {
-            string assignType = assignNode.getAttribute("type").getValue().ToString();
-            string assignTo = assignNode.getAttribute("to").getValue().ToString();
-            string assignFrom = assignNode.getAttribute("from").getValue().ToString();
+            string assignType = assignNode.getAttribute(AttributeConstants.TYPE).getValue().ToString();
+            string assignTo = assignNode.getAttribute(AttributeConstants.TO).getValue().ToString();
+            string assignFrom = assignNode.getAttribute(AttributeConstants.FROM).getValue().ToString(); //TODO: use value-of here
 
             switch (assignType)
             {
@@ -329,8 +330,8 @@ namespace FlowEngine.Executor
 
         private void executeLogger(LoggerElement loggerNode)
         {
-            string logType = loggerNode.getAttribute("type").getValue().ToString();
-            string logValue = loggerNode.getAttribute("value").getValue().ToString();
+            string logType = loggerNode.getAttribute(AttributeConstants.TYPE).getValue().ToString();
+            string logValue = loggerNode.getAttribute(AttributeConstants.VALUE).getValue().ToString();
             switch (logType)
             {
                 case "Info":
