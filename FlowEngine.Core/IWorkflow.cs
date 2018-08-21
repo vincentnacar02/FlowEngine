@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlowEngine.Core.providers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,9 @@ namespace FlowEngine.Core
     public interface IWorkflow
     {
         void InitializeElements();
+
+        void SetState(IWorkflowState stateProvider);
+
+        IWorkflowState GetState();
     }
 }

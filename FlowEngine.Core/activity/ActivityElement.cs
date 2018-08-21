@@ -14,7 +14,7 @@ namespace FlowEngine.Core.activity
     /// </summary>
     public class ActivityElement : AbstractElement
     {
-        private string[] VALID_ATTRIBUTES = new string[] { "id", "return", "return-type" };
+        private string[] VALID_ATTRIBUTES = new string[] { "id" };
         private string[] REQUIRED_ATTRIBUTES = new string[] { "id" };
 
         public ActivityElement(XmlNode node)

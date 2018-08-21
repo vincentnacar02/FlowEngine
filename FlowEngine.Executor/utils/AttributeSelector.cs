@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlowEngine.SDK.interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,9 +23,15 @@ namespace FlowEngine.Executor.utils
             }
             else if (selectorValue.StartsWith("[") && selectorValue.EndsWith("]"))
             {
-                string activityId = selectorValue.Replace("[", "").Replace("]", "");
-                ActivityReturn activityReturn = getActivityInstances()[activityId];
-                value = activityReturn.ReturnValue;
+                string activityFieldSelector = selectorValue.Replace("[", "").Replace("]", "");
+
+                if (!activityFieldSelector.Contains("."))
+                    throw new Exception("Invalid value-of selector.");
+
+                string[] activityField = activityFieldSelector.Split('.');
+
+                IResult result = getActivityInstances()[activityField[0]];
+                value = result.getData()[activityField[1]];
             }
             else
             {
@@ -35,6 +42,6 @@ namespace FlowEngine.Executor.utils
 
         protected abstract IDictionary<object, object> getVariableRegistry();
 
-        protected abstract IDictionary<object, ActivityReturn> getActivityInstances();
+        protected abstract IDictionary<object, IResult> getActivityInstances();
     }
 }

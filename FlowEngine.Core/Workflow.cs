@@ -1,4 +1,5 @@
 ﻿using FlowEngine.Core.elements.interfaces;
+using FlowEngine.Core.providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace FlowEngine.Core
         private XmlNodeList ActivitiesNode;
         private XmlNodeList ExecutionNode;
 
+        private IWorkflowState StateProvider;
         private IList<IElement> ExecutionElements;
 
         public Workflow()
@@ -38,6 +40,16 @@ namespace FlowEngine.Core
         {
             // initialize only the execution block
             InitRecursive(this.ExecutionNode);
+        }
+
+        public void SetState(IWorkflowState stateProvider)
+        {
+            this.StateProvider = stateProvider;
+        }
+
+        public IWorkflowState GetState()
+        {
+            return this.StateProvider;
         }
 
         private void InitRecursive(XmlNodeList nodes)

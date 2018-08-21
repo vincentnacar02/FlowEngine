@@ -5,6 +5,7 @@ using FlowEngine.Core.control_flow;
 using FlowEngine.Core.elements.interfaces;
 using FlowEngine.Core.input;
 using FlowEngine.Core.output;
+using FlowEngine.Core.providers;
 using FlowEngine.Executor.types;
 using FlowEngine.Executor.utils;
 using FlowEngine.SDK;
@@ -28,12 +29,11 @@ namespace FlowEngine.Executor
 
         private String _libPath;
         private XmlDocument _doc = new XmlDocument();
-        private IDictionary<object, IActivity> _activities = new Dictionary<object, IActivity>();
-        private IDictionary<object, ActivityReturn> _inMemoryActivityReturn = new Dictionary<object, ActivityReturn>();
-        private IDictionary<object, object> _variableRegistry = new Dictionary<object, object>();
+
         private _AttributeSelectorImpl _AttributeSelector;
 
         private Workflow _workflow;
+        private WorkflowStateProvider _stateProvider;
 
         public WorkflowExecutor(String workflowPath)
         {
@@ -48,14 +48,17 @@ namespace FlowEngine.Executor
             XmlNodeList executionNode = this._doc.DocumentElement.SelectNodes("Execution/*");
             this._workflow = new Workflow(settingsNode, activitiesNode, executionNode);
 
-            this.InitializeActivitiesBlock();
+            this._stateProvider = new WorkflowStateProvider();
+            this._workflow.SetState(this._stateProvider);
+
+            this.InitializeActivities();
 
             this._workflow.InitializeElements();
 
-            this._AttributeSelector = new _AttributeSelectorImpl(this._variableRegistry, this._inMemoryActivityReturn);
+            this._AttributeSelector = new _AttributeSelectorImpl(this._stateProvider.getVariables(), this._stateProvider.getActivityResults());
         }
 
-        private void InitializeActivitiesBlock()
+        private void InitializeActivities()
         {
             foreach (XmlNode activity in this._workflow.getActivitiesNode())
             {
@@ -79,7 +82,7 @@ namespace FlowEngine.Executor
 
                         activity_instance.onInit();
 
-                        _activities.Add(id, activity_instance);
+                        this._stateProvider.getActivities().Add(id, activity_instance);
                         log.DebugFormat("Assembly Loaded {0}", id);
                     }
 
@@ -105,14 +108,15 @@ namespace FlowEngine.Executor
                 switch (line.getElementName())
                 {
                     case "Activity":
-                        ActivityReturn result = this.executeActivity((ActivityElement) line);
+                        var activity = (ActivityElement) line;
+                        IResult result = this.executeActivity(activity);
                         if (result != null)
                         {
-                            if (this._inMemoryActivityReturn.ContainsKey(result.ActivityId))
+                            if (this._stateProvider.getActivityResults().ContainsKey(activity.getAttribute("id").getValue()))
                             {
-                                this._inMemoryActivityReturn.Remove(result.ActivityId);
+                                this._stateProvider.getActivityResults().Remove(activity.getAttribute("id").getValue());
                             }
-                            this._inMemoryActivityReturn.Add(result.ActivityId, result);
+                            this._stateProvider.getActivityResults().Add(activity.getAttribute("id").getValue(), result);
                         }
                         break;
                     case "If":
@@ -157,7 +161,7 @@ namespace FlowEngine.Executor
         {
             object name = variableNode.getAttribute("name").getValue();
             object value = variableNode.getAttribute("value").getValue();
-            _variableRegistry.Add(name, value);
+            this._stateProvider.getVariables().Add(name, value);
         }
 
         public void setLibPath(String libPath)
@@ -165,36 +169,27 @@ namespace FlowEngine.Executor
             this._libPath = libPath;
         }
 
-        private ActivityReturn executeActivity(ActivityElement activityNode)
+        private IResult executeActivity(ActivityElement activityNode)
         {
             String currentId = activityNode.getAttribute("id").getValue().ToString();
-            IActivity toExecute = _activities[currentId];
+            IActivity toExecute = this._stateProvider.getActivities()[currentId];
 
             log.DebugFormat("executing activity [{0}]", toExecute.getId());
             IResult currentResult = toExecute.run();
 
-            ActivityReturn activityReturn = null;
-            if (activityNode.getAttribute("return") != null)
-            {
-                String returnField = activityNode.getAttribute("return").getValue().ToString();
-                String returnType = activityNode.getAttribute("return-type").getValue().ToString();
-                object resultValue = currentResult.getData()[returnField];
-                if (resultValue != null)
-                {
-                    log.DebugFormat("activity {0} return {1} with type {2}", currentId, resultValue, returnType);
-                    activityReturn = new ActivityReturn(currentId, returnField, resultValue, returnType);
-                }
-            }
-
             if (currentResult.getStatus().Equals(ResultStatus.SUCCESS))
             {
-                log.DebugFormat("Execute Activity success >> {0}", currentId);
+                Int32 resultCount = 0;
+                if (currentResult.getData() != null)
+                    resultCount = currentResult.getData().Count;
+
+                log.DebugFormat("Execute Activity success >> {0}, Result Data count: {1}", currentId, resultCount);
             }
             else
             {
                 log.DebugFormat("Execute Activity[{0}] error >> {1}", currentId, currentResult.getException().Message);
             }
-            return activityReturn;
+            return currentResult;
         }
 
         private ConditionResult assertCondition(IfElement condition)
@@ -275,12 +270,12 @@ namespace FlowEngine.Executor
             IList<string> list = (IList<string>) selectedValue;
             foreach (var item in list)
             {
-                _variableRegistry.Add(asVariableName, item);
+                this._stateProvider.getVariables().Add(asVariableName, item);
                 IList<IElement> doNodes = forEachNode.DoNodes;
 
                 runRecursive(doNodes);
 
-                _variableRegistry.Remove(asVariableName); // remove in memory
+                this._stateProvider.getVariables().Remove(asVariableName); // remove in memory
             }
         }
 
@@ -317,7 +312,7 @@ namespace FlowEngine.Executor
                     String[] activityProperty = assignTo.Split('.');
                     if (activityProperty != null && activityProperty[0] != null && activityProperty[1] != null)
                     {
-                        IActivity activity = _activities[activityProperty[0]];
+                        IActivity activity = this._stateProvider.getActivities()[activityProperty[0]];
                         if (activity != null)
                         {
                             activity.setPropertyValue(activityProperty[1], this._AttributeSelector.valueOf(assignFrom));
@@ -325,7 +320,7 @@ namespace FlowEngine.Executor
                     }
                     break;
                 case "Variable":
-                    _variableRegistry[assignTo] = this._AttributeSelector.valueOf(assignFrom);
+                    this._stateProvider.getVariables()[assignTo] = this._AttributeSelector.valueOf(assignFrom);
                     break;
                 default:
                     break;
@@ -352,9 +347,9 @@ namespace FlowEngine.Executor
         class _AttributeSelectorImpl : AttributeSelector
         {
             private IDictionary<object, object> _VariableInstances;
-            private IDictionary<object, ActivityReturn> _ActivityInstances;
+            private IDictionary<object, IResult> _ActivityInstances;
 
-            public _AttributeSelectorImpl(IDictionary<object, object> variableInstances, IDictionary<object, ActivityReturn> activityInstances)
+            public _AttributeSelectorImpl(IDictionary<object, object> variableInstances, IDictionary<object, IResult> activityInstances)
             {
                 this._VariableInstances = variableInstances;
                 this._ActivityInstances = activityInstances;
@@ -365,7 +360,7 @@ namespace FlowEngine.Executor
                 return this._VariableInstances;
             }
 
-            protected override IDictionary<object, ActivityReturn> getActivityInstances()
+            protected override IDictionary<object, IResult> getActivityInstances()
             {
                 return this._ActivityInstances;
             }
