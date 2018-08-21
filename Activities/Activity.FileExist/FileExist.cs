@@ -37,5 +37,10 @@ namespace FileExist
             }
             return new ActivityResult(result, ResultStatus.SUCCESS);
         }
+
+        public override void onInit()
+        {
+
+        }
     }
 }

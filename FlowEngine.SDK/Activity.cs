@@ -36,5 +36,7 @@ namespace FlowEngine.SDK
             prop.setValue(value);
             this._properties.getItems()[key] = prop;
         }
+
+        public abstract void onInit();
     }
 }

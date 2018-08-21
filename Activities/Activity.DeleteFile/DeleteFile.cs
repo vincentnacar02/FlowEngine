@@ -35,5 +35,10 @@ namespace DeleteFile
             }
             return new ActivityResult(null, ResultStatus.SUCCESS);
         }
+
+        public override void onInit()
+        {
+
+        }
     }
 }

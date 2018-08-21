@@ -76,6 +76,9 @@ namespace FlowEngine.Executor
                     foreach (Type type in DLL.GetExportedTypes())
                     {
                         dynamic activity_instance = Activator.CreateInstance(type, id, props);
+
+                        activity_instance.onInit();
+
                         _activities.Add(id, activity_instance);
                         log.DebugFormat("Assembly Loaded {0}", id);
                     }

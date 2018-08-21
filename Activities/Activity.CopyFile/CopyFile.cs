@@ -37,5 +37,10 @@ namespace CopyFile
             }
             return new ActivityResult(null, ResultStatus.SUCCESS);
         }
+
+        public override void onInit()
+        {
+            
+        }
     }
 }

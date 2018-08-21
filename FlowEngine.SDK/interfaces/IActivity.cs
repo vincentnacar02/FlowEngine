@@ -9,7 +9,12 @@ namespace FlowEngine.SDK.interfaces
     public interface IActivity
     {
         object getId();
+
         IResult run();
+
         void setPropertyValue(string key, object value);
+
+        // lifecycle hooks
+        void onInit();
     }
 }
