@@ -1,4 +1,5 @@
-﻿using FlowEngine.Core.elements.interfaces;
+﻿using FlowEngine.Core.constants;
+using FlowEngine.Core.elements.interfaces;
 using FlowEngine.Core.elements.types;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace FlowEngine.Core.control_flow
 
         public override string getElementName()
         {
-            return "Repeat";
+            return ElementNameConstants.REPEAT;
         }
 
         public override ControlFlowType getControlFlowType()

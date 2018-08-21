@@ -1,4 +1,5 @@
-﻿using FlowEngine.Core.elements.types;
+﻿using FlowEngine.Core.constants;
+using FlowEngine.Core.elements.types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace FlowEngine.Core.activity
 
         public override string getElementName()
         {
-            return "Activity";
+            return ElementNameConstants.ACTIVITY;
         }
 
         public override ElementType getType()

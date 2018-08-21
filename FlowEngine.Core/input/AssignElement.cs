@@ -1,4 +1,5 @@
-﻿using FlowEngine.Core.elements.types;
+﻿using FlowEngine.Core.constants;
+using FlowEngine.Core.elements.types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace FlowEngine.Core.input
 
         public override string getElementName()
         {
-            return "Assign";
+            return ElementNameConstants.ASSIGN;
         }
 
         public override ElementType getType()
