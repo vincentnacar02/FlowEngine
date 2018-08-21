@@ -108,7 +108,7 @@ namespace FlowEngine.Executor
             {
                 switch (line.getElementName())
                 {
-                    case "Activity":
+                    case ElementNameConstants.ACTIVITY:
                         var activity = (ActivityElement) line;
                         IResult result = this.executeActivity(activity);
                         if (result != null)
@@ -120,7 +120,7 @@ namespace FlowEngine.Executor
                             this._stateProvider.getActivityResults().Add(activity.getAttribute(AttributeConstants.ID).getValue(), result);
                         }
                         break;
-                    case "If":
+                    case ElementNameConstants.IF:
                         ConditionResult conditionResult = this.assertCondition((IfElement) line);
                         if (conditionResult.Result)
                         {
@@ -137,19 +137,19 @@ namespace FlowEngine.Executor
                             }
                         }
                         break;
-                    case "ForEach":
+                    case ElementNameConstants.FOR_EACH:
                         this.executeForEach((ForEachElement) line);
                         break;
-                    case "Assign":
+                    case ElementNameConstants.ASSIGN:
                         this.executeAssign((AssignElement) line);
                         break;
-                    case "Variable":
+                    case ElementNameConstants.VARIABLE:
                         this.createVariable((VariableElement) line);
                         break;
-                    case "Logger":
+                    case ElementNameConstants.LOGGER:
                         this.executeLogger((LoggerElement) line);
                         break;
-                    case "Repeat":
+                    case ElementNameConstants.REPEAT:
                         this.executeRepeat((RepeatElement) line);
                         break;
                     default:
