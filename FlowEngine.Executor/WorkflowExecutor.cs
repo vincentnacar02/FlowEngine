@@ -46,22 +46,30 @@ namespace FlowEngine.Executor
         //TODO: need to refactor
         public void InitializeWorkflow()
         {
-            log.Debug("Initialize workflow");
-            XmlNodeList settingsNode = this._doc.DocumentElement.SelectNodes("Settings/*");
-            XmlNodeList activitiesNode = this._doc.DocumentElement.SelectNodes("Activities/Activity");
-            XmlNodeList executionNode = this._doc.DocumentElement.SelectNodes("Execution/*");
-            this._workflow = new Workflow(settingsNode, activitiesNode, executionNode);
+            try
+            {
+                log.Debug("Initialize workflow");
+                XmlNodeList settingsNode = this._doc.DocumentElement.SelectNodes("Settings/*");
+                XmlNodeList activitiesNode = this._doc.DocumentElement.SelectNodes("Activities/Activity");
+                XmlNodeList executionNode = this._doc.DocumentElement.SelectNodes("Execution/*");
+                this._workflow = new Workflow(settingsNode, activitiesNode, executionNode);
 
-            this._stateProvider = new WorkflowStateProvider();
-            this._workflow.SetState(this._stateProvider);
+                this._stateProvider = new WorkflowStateProvider();
+                this._workflow.SetState(this._stateProvider);
 
-            this.InitializeGlobalSettings();
+                this.InitializeGlobalSettings();
 
-            this.InitializeActivities();
+                this.InitializeActivities();
 
-            this._workflow.InitializeElements();
+                this._workflow.InitializeElements();
 
-            this._AttributeSelector = new _AttributeSelectorImpl(this._stateProvider.getVariables(), this._stateProvider.getActivityResults());
+                this._AttributeSelector = new _AttributeSelectorImpl(this._stateProvider.getVariables(), this._stateProvider.getActivityResults());
+            }
+            catch (Exception ex)
+            {
+                log.DebugFormat("Workflow Error: {0}", ex.Message);
+                throw ex;
+            }
         }
 
         private void InitializeGlobalSettings()
@@ -117,13 +125,21 @@ namespace FlowEngine.Executor
 
         public void RunWorkflow()
         {
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            try
+            {
+                var watch = System.Diagnostics.Stopwatch.StartNew();
 
-            runRecursive(this._workflow.getExecutionElements());
+                runRecursive(this._workflow.getExecutionElements());
             
-            watch.Stop();
+                watch.Stop();
 
-            log.DebugFormat("Workflow execution finished. Elapsed Time : {0}", watch.Elapsed);
+                log.DebugFormat("Workflow execution finished. Elapsed Time : {0}", watch.Elapsed);
+            }
+            catch (Exception ex)
+            {
+                log.DebugFormat("Workflow Error: {0}", ex.Message);
+                throw ex;
+            }
         }
 
         private void runRecursive(IList<IElement> execution)
