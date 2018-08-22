@@ -25,7 +25,15 @@ namespace FlowEngine.Service
                 workflowInfo.Arguments = "\"" + workflowPath + "\"";
                 workflowInfo.UseShellExecute = false;
 
-                System.Diagnostics.Process.Start(workflowInfo);
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                process.StartInfo = workflowInfo;
+
+                System.Threading.ThreadStart _threadStart = new System.Threading.ThreadStart(() =>
+                {
+                    bool result = process.Start();
+                });
+                System.Threading.Thread _thread = new System.Threading.Thread(_threadStart);
+                _thread.Start();
             }
             catch (Exception ex)
             {
