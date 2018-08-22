@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="EngineService.svc" />
+    <Content Include="Global.asax" />
     <Content Include="Web.config" />
     <Content Include="Workflows.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -69,7 +70,11 @@
     <Compile Include="EngineService.svc.cs">
       <DependentUpon>EngineService.svc</DependentUpon>
     </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="IEngineService.cs" />
+    <Compile Include="models\Workflow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

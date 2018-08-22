@@ -1,5 +1,7 @@
-﻿using System;
+﻿using FlowEngine.Service.models;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -8,16 +10,16 @@ using System.Text;
 
 namespace FlowEngine.Service
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)] 
     public class EngineService : IEngineService
     {
         public void StartWorkflow(Workflow workflow)
         {
             try
             {
-                //TEST
                 string flowEngine = System.Configuration.ConfigurationManager.AppSettings["WorkflowEngineExe"];
                 string workflowDir = System.Configuration.ConfigurationManager.AppSettings["WorkflowDirectory"];
-                string workflowPath = System.IO.Path.Combine(workflowDir, "testrepeatworkflow.xml");
+                string workflowPath = System.IO.Path.Combine(workflowDir, workflow.FileName.ToString());
 
                 System.Diagnostics.ProcessStartInfo workflowInfo = new System.Diagnostics.ProcessStartInfo(flowEngine);
                 workflowInfo.Arguments = "\"" + workflowPath + "\"";
@@ -33,10 +35,7 @@ namespace FlowEngine.Service
 
         public IList<Workflow> GetWorkflows()
         {
-            Workflow test = new Workflow();
-            List<Workflow> tests = new List<Workflow>();
-            tests.Add(test);
-            return tests;
+            return Global.WorkflowsIntance;
         }
     }
 }

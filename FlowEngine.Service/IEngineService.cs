@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlowEngine.Service.models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -25,17 +26,5 @@ namespace FlowEngine.Service
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "workflows")]
         IList<Workflow> GetWorkflows();
-    }
-
-
-    [DataContract]
-    public class Workflow
-    {
-        [DataMember]
-        public bool WorkflowId
-        {
-            get;
-            set;
-        }
     }
 }

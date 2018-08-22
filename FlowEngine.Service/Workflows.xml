@@ -1,0 +1,18 @@
+﻿<Workflows>
+  <Workflow>
+    <id>ABC3C391-B1FE-416E-A606-12342BD49EB9</id>
+    <filename>TestRepeatWorkflow.xml</filename>
+    <status></status>
+    <date-published></date-published>
+    <last-run-date></last-run-date>
+    <message></message>
+  </Workflow>
+  <Workflow>
+    <id>ABC3C391-B1FE-416E-A606-B2C42BD49EB9</id>
+    <filename>ListFilesWorkflowDemo.xml</filename>
+    <status></status>
+    <date-published></date-published>
+    <last-run-date></last-run-date>
+    <message></message>
+  </Workflow>
+</Workflows>
